@@ -13,6 +13,14 @@ var romanToInt = map[string]int{
 	"VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10,
 }
 
+func containsValue(m map[int]string, value string) bool {
+	for _, v := range m {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}
 func arabicToRoman(n int) string {
 	// 100 достаточно, потому что по условию не больше 10
 	var arabics = []int{1, 4, 5, 9, 10, 40, 50, 90, 100}
@@ -30,14 +38,75 @@ func arabicToRoman(n int) string {
 	}
 	return result
 }
+
+func numberValidator(s string) (int, bool) {
+	var isRoman = false
+	v, ok := romanToInt[s]
+	if ok {
+		isRoman = true
+	} else {
+		vNum, err := strconv.Atoi(s)
+		if (err != nil) || (vNum < 1) || (vNum > 10) {
+			panic("Что-то не так с числом.")
+		}
+		return vNum, isRoman
+	}
+	return v, isRoman
+
+}
+
 func main() {
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
-		input = strings.TrimSpace(input)
+		//input = strings.TrimSpace(input)
+		operands := strings.Fields(input)
+		if len(operands) != 3 {
+			panic("Только 2 числа и оператор")
+		}
+		num1, romanFlag1 := numberValidator(operands[0])
+		op := operands[1]
+		num2, romanFlag2 := numberValidator(operands[2])
+		if romanFlag2 != romanFlag1 {
+			panic("Oба римские, либо оба арабские")
+		}
 
-		num, _ := strconv.Atoi(input)
-		fmt.Println(arabicToRoman(num))
+		var result int
+		switch op {
+		case "+":
+			result = num1 + num2
+			if romanFlag1 {
+				fmt.Printf("%v\n", arabicToRoman(result))
+			} else {
+				fmt.Printf("%v\n", result)
+			}
+		case "-":
+			result = num1 - num2
+			if romanFlag1 {
+				if result < 1 {
+					panic("Получилось что-то не римское")
+				} else {
+					fmt.Printf("%v\n", result)
+				}
+			}
+		case "*":
+			result = num1 * num2
+			if romanFlag1 {
+				fmt.Printf("%v\n", arabicToRoman(result))
+			} else {
+				fmt.Printf("%v\n", result)
+			}
+		case "/":
+			result = num1 / num2
+
+			if romanFlag1 {
+				fmt.Printf("%v\n", arabicToRoman(result))
+			} else {
+				fmt.Printf("%v\n", result)
+			}
+		default:
+			panic("Такого оператора нам не надо.")
+		}
 		continue
 	}
 }
