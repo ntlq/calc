@@ -13,16 +13,17 @@ var romanToInt = map[string]int{
 	"VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10,
 }
 
-func containsValue(m map[int]string, value string) bool {
-	for _, v := range m {
-		if v == value {
-			return true
-		}
+func printer(value int, flag bool) {
+	if flag {
+		fmt.Printf("%v\n", arabicToRoman(value))
+	} else {
+		fmt.Printf("%v\n", value)
 	}
-	return false
+
 }
+
 func arabicToRoman(n int) string {
-	// 100 достаточно, потому что по условию не больше 10
+	// 100 достаточно, потому что по условию не больше 10 * 10
 	var arabics = []int{1, 4, 5, 9, 10, 40, 50, 90, 100}
 	var romans = []string{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C"}
 	var result string
@@ -75,35 +76,22 @@ func main() {
 		switch op {
 		case "+":
 			result = num1 + num2
-			if romanFlag1 {
-				fmt.Printf("%v\n", arabicToRoman(result))
-			} else {
-				fmt.Printf("%v\n", result)
-			}
+			printer(result, romanFlag1)
 		case "-":
 			result = num1 - num2
 			if romanFlag1 {
 				if result < 1 {
 					panic("Получилось что-то не римское")
 				} else {
-					fmt.Printf("%v\n", result)
+					printer(result, romanFlag1)
 				}
 			}
 		case "*":
 			result = num1 * num2
-			if romanFlag1 {
-				fmt.Printf("%v\n", arabicToRoman(result))
-			} else {
-				fmt.Printf("%v\n", result)
-			}
+			printer(result, romanFlag1)
 		case "/":
 			result = num1 / num2
-
-			if romanFlag1 {
-				fmt.Printf("%v\n", arabicToRoman(result))
-			} else {
-				fmt.Printf("%v\n", result)
-			}
+			printer(result, romanFlag1)
 		default:
 			panic("Такого оператора нам не надо.")
 		}
