@@ -85,13 +85,23 @@ func main() {
 				} else {
 					printer(result, romanFlag1)
 				}
+			} else {
+				printer(result, romanFlag1)
 			}
 		case "*":
 			result = num1 * num2
 			printer(result, romanFlag1)
 		case "/":
 			result = num1 / num2
-			printer(result, romanFlag1)
+			if romanFlag1 {
+				if result < 1 {
+					panic("Получилось что-то не римское")
+				} else {
+					printer(result, romanFlag1)
+				}
+			} else {
+				printer(result, romanFlag1)
+			}
 		default:
 			panic("Такого оператора нам не надо.")
 		}
