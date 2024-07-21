@@ -13,11 +13,11 @@ var romanToInt = map[string]int{
 	"VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10,
 }
 
-func printer(value int, flag bool) {
+func printNumber(v int, flag bool) {
 	if flag {
-		fmt.Printf("%v\n", arabicToRoman(value))
+		fmt.Printf("%v\n", arabicToRoman(v))
 	} else {
-		fmt.Printf("%v\n", value)
+		fmt.Printf("%v\n", v)
 	}
 
 }
@@ -31,26 +31,24 @@ func arabicToRoman(n int) string {
 	for n > 0 {
 		for n >= arabics[index] {
 			n -= arabics[index]
-			//fmt.Println(n)
 			result += romans[index]
-			//index -= 1
 		}
 		index -= 1
 	}
 	return result
 }
 
-func numberValidator(s string) (int, bool) {
+func validateNumber(s string) (int, bool) {
 	var isRoman = false
 	v, ok := romanToInt[s]
 	if ok {
 		isRoman = true
 	} else {
-		vNum, err := strconv.Atoi(s)
-		if (err != nil) || (vNum < 1) || (vNum > 10) {
+		vInt, err := strconv.Atoi(s)
+		if (err != nil) || (vInt < 1) || (vInt > 10) {
 			panic("Что-то не так с числом.")
 		}
-		return vNum, isRoman
+		return vInt, isRoman
 	}
 	return v, isRoman
 
@@ -60,14 +58,13 @@ func main() {
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
-		//input = strings.TrimSpace(input)
 		operands := strings.Fields(input)
 		if len(operands) != 3 {
 			panic("Только 2 числа и оператор")
 		}
-		num1, romanFlag1 := numberValidator(operands[0])
+		num1, romanFlag1 := validateNumber(operands[0])
 		op := operands[1]
-		num2, romanFlag2 := numberValidator(operands[2])
+		num2, romanFlag2 := validateNumber(operands[2])
 		if romanFlag2 != romanFlag1 {
 			panic("Oба римские, либо оба арабские")
 		}
@@ -76,31 +73,31 @@ func main() {
 		switch op {
 		case "+":
 			result = num1 + num2
-			printer(result, romanFlag1)
+			printNumber(result, romanFlag1)
 		case "-":
 			result = num1 - num2
 			if romanFlag1 {
 				if result < 1 {
 					panic("Получилось что-то не римское")
 				} else {
-					printer(result, romanFlag1)
+					printNumber(result, romanFlag1)
 				}
 			} else {
-				printer(result, romanFlag1)
+				printNumber(result, romanFlag1)
 			}
 		case "*":
 			result = num1 * num2
-			printer(result, romanFlag1)
+			printNumber(result, romanFlag1)
 		case "/":
 			result = num1 / num2
 			if romanFlag1 {
 				if result < 1 {
 					panic("Получилось что-то не римское")
 				} else {
-					printer(result, romanFlag1)
+					printNumber(result, romanFlag1)
 				}
 			} else {
-				printer(result, romanFlag1)
+				printNumber(result, romanFlag1)
 			}
 		default:
 			panic("Такого оператора нам не надо.")
